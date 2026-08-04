@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api/api";
+import Loader from "../components/Loader";
+import toast from "react-hot-toast";
 
 function ProductDetails() {
 
@@ -19,6 +21,7 @@ function ProductDetails() {
             } catch (error) {
 
                 console.log(error);
+                
 
             }
 
@@ -26,11 +29,41 @@ function ProductDetails() {
         fetchProduct();
 
     }, [id]);
+    const handleAddToCart = async () => {
+
+        try {
+
+            const token = localStorage.getItem("token");
+
+            await API.post(
+                "/cart",
+                {
+                    productId: product._id,
+                    quantity: 1
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            toast.success("Added to Cart!");
+
+        } catch (error) {
+
+            console.log(error);
+
+            toast.error(
+                error.response?.data?.message || "Failed to add to cart"
+            );
+
+        }
+
+    };
     
     if (!product) {
-        return (
-            <h1 className="text-center mt-20">Loading...</h1>
-        );
+        return <Loader />;
     }
 
 
@@ -63,6 +96,12 @@ return (
             <p>{product.seller.fullName}</p>
             <p>{product.seller.email}</p>
         </div>
+        <button
+            onClick={handleAddToCart}
+            className="mt-6 bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700"
+        >
+            Add to Cart
+        </button>
 
     </div>
 );

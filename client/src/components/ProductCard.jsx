@@ -4,11 +4,13 @@ function ProductCard({ product }) {
     return (
         <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
 
-            <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-56 object-cover"
-            />
+            {product.image && (
+                <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-56 object-cover"
+                />
+            )}
 
             <div className="p-4">
 

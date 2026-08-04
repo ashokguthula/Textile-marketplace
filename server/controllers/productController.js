@@ -1,5 +1,29 @@
 import Product from "../models/Product.js";
 
+import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
+
+const uploadToCloudinary = (buffer) => {
+    return new Promise((resolve, reject) => {
+
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "textile-marketplace"
+            },
+            (error, result) => {
+
+                if (error) return reject(error);
+
+                resolve(result);
+
+            }
+        );
+
+        streamifier.createReadStream(buffer).pipe(stream);
+
+    });
+};
+
 export const createProduct = async (req, res) => {
     try {
 
@@ -8,8 +32,7 @@ export const createProduct = async (req, res) => {
             description,
             category,
             price,
-            quantity,
-            image
+            quantity
         } = req.body;
 
         // Validation
@@ -24,6 +47,23 @@ export const createProduct = async (req, res) => {
                 message: "Please fill all required fields."
             });
         }
+        if (price < 0 || quantity < 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Price and quantity cannot be negative."
+            });
+        }
+        let imageUrl = "";
+
+        if (req.file) {
+
+            const uploadedImage = await uploadToCloudinary(
+                req.file.buffer
+            );
+
+            imageUrl = uploadedImage.secure_url;
+
+        }
 
         const product = await Product.create({
             title,
@@ -31,7 +71,7 @@ export const createProduct = async (req, res) => {
             category,
             price,
             quantity,
-            image,
+            image: imageUrl,
             seller: req.user.id
         });
 
@@ -129,10 +169,18 @@ export const updateProduct = async (req, res) => {
 
         const product = await Product.findById(req.params.id);
 
+        const { price, quantity } = req.body;
+
         if (!product) {
             return res.status(404).json({
                 success: false,
                 message: "Product not found."
+            });
+        }
+        if (price < 0 || quantity < 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Price and quantity cannot be negative."
             });
         }
 

@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 function Navbar() {
+    const navigate = useNavigate();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const handleLogout = () => {
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/login");
+
+    };
     return (
 
         <nav className="bg-white shadow">
@@ -11,31 +22,65 @@ function Navbar() {
                     to="/"
                     className="text-2xl font-bold text-emerald-600">
                     Textile Marketplace
-                </Link>
+                </Link>               
 
-                <div className="flex gap-6">
+                <div className="flex gap-6 items-center">
 
                     <Link to="/">
                         Home
                     </Link>
 
-                    <Link to="/login">
-                        Login
-                    </Link>
+                    {!user && (
+                        <>
+                            <Link to="/login">
+                                Login
+                            </Link>
 
-                    <Link to="/register">
-                        Register
-                    </Link>
+                            <Link to="/register">
+                                Register
+                            </Link>
+                        </>
+                    )}
+                    {user?.role === "buyer" && (
+                        <Link to="/cart">Cart</Link>
+                    )}
 
-                    <Link to="/add-product">
-                        Sell
-                    </Link>
-                    <Link
-                        to="/dashboard"
-                        className="hover:text-emerald-600">
-                        Dashboard
-                    </Link>
-                   
+                    {user?.role === "buyer" && (
+
+                        <Link
+                            to="/orders"
+                            className="hover:text-emerald-600"
+                        >
+                            My Orders
+                        </Link>
+                    )}
+
+                    {user?.role === "supplier" && (
+                        <>
+                            <Link to="/add-product">
+                                Sell
+                            </Link>
+
+                            <Link to="/dashboard">
+                                Dashboard
+                            </Link>
+                        </>
+                    )}
+
+                    {user?.role === "buyer" && (
+                        <Link to="/buyer-dashboard">
+                            Dashboard
+                        </Link>
+                    )}
+
+                    {user && (
+                        <button
+                            onClick={handleLogout}
+                            className="text-red-600 hover:text-red-700"
+                        >
+                            Logout
+                        </button>
+                    )}
 
                 </div>
 

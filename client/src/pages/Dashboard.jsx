@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import Loader from "../components/Loader";
+import EmptyState from "../components/EmptyState";
 
 function Dashboard() {
+    const [loading, setLoading] = useState(true);
 
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
 
         const fetchMyProducts = async () => {
+
+            setLoading(true);
 
             try {
 
@@ -21,10 +27,12 @@ function Dashboard() {
                 });
 
                 setProducts(data.products);
+                setLoading(false);
 
             } catch (error) {
 
                 console.log(error);
+                setLoading(false);
 
             }
 
@@ -55,19 +63,23 @@ function Dashboard() {
                 products.filter(product => product._id !== id)
             );
 
-            alert("Product deleted successfully!");
+            toast.success("Product deleted successfully!");
 
         } catch (error) {
 
             console.log(error);
+            
 
-            alert(
+            toast.error(
                 error.response?.data?.message || "Delete Failed"
             );
 
         }
 
     };
+    if (loading) {
+    return <Loader />;
+}
 
     return (
 
@@ -82,7 +94,12 @@ function Dashboard() {
             {
                 products.length === 0 ? (
 
-                    <h2>No products yet.</h2>
+                    <EmptyState
+                        title="No Products Yet"
+                        description="Start selling by adding your first product."
+                        buttonText="Add Product"
+                        buttonLink="/add-product"
+                    />
 
                 ) : (
 

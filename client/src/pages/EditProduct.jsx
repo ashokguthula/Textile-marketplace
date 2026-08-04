@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "../api/api";
+import toast from "react-hot-toast";
 
 function EditProduct() {
 
@@ -55,6 +56,8 @@ function EditProduct() {
         });
 
     };
+
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -73,7 +76,7 @@ function EditProduct() {
                 }
             );
 
-            alert("Product Updated Successfully!");
+            toast.success("Product Updated Successfully!");
 
             navigate("/dashboard");
 
@@ -81,7 +84,7 @@ function EditProduct() {
 
             console.log(error);
 
-            alert(
+            toast.error(
                 error.response?.data?.message || "Update Failed"
             );
 
@@ -130,6 +133,7 @@ function EditProduct() {
                     type="number"
                     name="price"
                     placeholder="Price"
+                    min="0"
                     value={formData.price}
                     onChange={handleChange}
                     className="w-full border p-3 rounded-lg"
@@ -139,16 +143,8 @@ function EditProduct() {
                     type="number"
                     name="quantity"
                     placeholder="Quantity"
+                    min="0"
                     value={formData.quantity}
-                    onChange={handleChange}
-                    className="w-full border p-3 rounded-lg"
-                />
-
-                <input
-                    type="text"
-                    name="image"
-                    placeholder="Image URL"
-                    value={formData.image}
                     onChange={handleChange}
                     className="w-full border p-3 rounded-lg"
                 />

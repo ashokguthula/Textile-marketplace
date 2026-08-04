@@ -30,6 +30,9 @@ const protect = async (req, res, next) => {
         // Save user data for next middleware/controller
         req.user = decoded;
 
+        console.log(req.user);
+        console.log("Decoded User:", req.user);
+
         next();
 
     } catch (error) {

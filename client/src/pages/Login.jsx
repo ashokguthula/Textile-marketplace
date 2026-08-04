@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/api";
-
+import toast from "react-hot-toast";
 function Login() {
-
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -30,17 +29,32 @@ function Login() {
                 formData
             );
 
+            // Save token
             localStorage.setItem("token", data.token);
 
-            navigate("/dashboard");
+            // Save logged-in user
+            localStorage.setItem(
+                "user",
+                JSON.stringify(data.user)
+            );
+            toast.success("Login Successful");
 
+            // Redirect based on role
+            if (data.user.role === "supplier") {
+
+                navigate("/dashboard");
+
+            } else {
+
+                navigate("/buyer-dashboard");
+
+            }
         } catch (error) {
 
-            alert(
+            toast.error(
                 error.response?.data?.message || "Login Failed"
             );
-
-        } finally {
+            } finally {
 
             setLoading(false);
 

@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 import upload from "../middleware/uploadMiddleware.js";
-import SupplierOnly from "../middleware/supplierMiddleware.js";
+import supplierOnly from "../middleware/supplierMiddleware.js";
 
 // Create a Product
 router.get("/", getAllProducts);

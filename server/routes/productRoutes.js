@@ -11,6 +11,7 @@ import {
 const router = express.Router();
 
 import upload from "../middleware/uploadMiddleware.js";
+import sellerOnly from "../middleware/sellerMiddleware.js";
 
 // Create a Product
 router.get("/", getAllProducts);
@@ -19,10 +20,26 @@ router.get("/my-products", protect, getMyProducts);
 
 router.get("/:id", getProductById);
 
-router.post("/", protect,upload.single("image"), createProduct);
+router.post(
+    "/",
+    protect,
+    sellerOnly,
+    upload.single("image"),
+    createProduct
+);
 
-router.put("/:id", protect, updateProduct);
+router.put(
+    "/:id",
+    protect,
+    sellerOnly,
+    updateProduct
+);
 
-router.delete("/:id", protect, deleteProduct);
+router.delete(
+    "/:id",
+    protect,
+    sellerOnly,
+    deleteProduct
+);
 
 export default router;

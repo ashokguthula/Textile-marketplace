@@ -81,6 +81,8 @@ export const getMyOrders = async (req, res) => {
         .populate("products.product")
         .sort({ createdAt: -1 });
 
+        console.log(JSON.stringify(orders, null, 2));
+
         res.status(200).json({
             success: true,
             orders

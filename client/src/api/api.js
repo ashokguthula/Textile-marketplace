@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://textile-marketplace-koe4.onrender.com/api"
+    baseURL: import.meta.env.VITE_API_URL
 });
 
 export default API;

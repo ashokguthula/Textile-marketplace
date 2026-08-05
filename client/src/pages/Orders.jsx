@@ -90,14 +90,14 @@ function Orders() {
                         {order.products.map((item, index) => (
 
                             <div
-                                key={`${item.product._id}-${index}`}
+                                key={`${order._id}-${item.product?._id || item._id}`}
                                 className="flex justify-between border-b py-3"
                             >
 
                                 <div>
 
                                     <p className="font-semibold">
-                                        {item.product.title}
+                                        {item.product?.title || "Product not available"}
                                     </p>
 
                                     <p className="text-gray-500">

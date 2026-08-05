@@ -90,11 +90,11 @@ return (
 
         <div className="mt-6">
             <h3 className="font-bold">
-                Seller
+                Supplier
             </h3>
 
-            <p>{product.seller.fullName}</p>
-            <p>{product.seller.email}</p>
+            <p>{product.supplier.fullName}</p>
+            <p>{product.supplier.email}</p>
         </div>
         <button
             onClick={handleAddToCart}

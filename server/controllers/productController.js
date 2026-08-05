@@ -72,7 +72,7 @@ export const createProduct = async (req, res) => {
             price,
             quantity,
             image: imageUrl,
-            seller: req.user.id
+            supplier: req.user.id
         });
 
         res.status(201).json({
@@ -95,7 +95,7 @@ export const getAllProducts = async (req, res) => {
     try {
 
         const products = await Product.find()
-            .populate("seller", "fullName email")
+            .populate("supplier", "fullName email")
             .sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -118,7 +118,7 @@ export const getProductById = async (req, res) => {
     try {
 
         const product = await Product.findById(req.params.id)
-            .populate("seller", "fullName email");
+            .populate("supplier", "fullName email");
 
         if (!product) {
             return res.status(404).json({
@@ -145,7 +145,7 @@ export const getMyProducts = async (req, res) => {
     try {
 
         const products = await Product.find({
-            seller: req.user.id
+            supplier: req.user.id
         }).sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -184,8 +184,8 @@ export const updateProduct = async (req, res) => {
             });
         }
 
-        // Only the seller can update
-        if (product.seller.toString() !== req.user.id) {
+        // Only the supplier can update
+        if (product.supplier.toString() !== req.user.id) {
             return res.status(401).json({
                 success: false,
                 message: "Not authorized."
@@ -232,9 +232,9 @@ export const deleteProduct = async (req, res) => {
 
         }
 
-        // Only seller can delete
+        // Only supplier can delete
 
-        if (product.seller.toString() !== req.user.id) {
+        if (product.supplier.toString() !== req.user.id) {
 
             return res.status(401).json({
                 success: false,

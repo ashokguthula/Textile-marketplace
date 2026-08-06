@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 function ProductDetails() {
 
     const { id } = useParams();
+    const user = JSON.parse(localStorage.getItem("user"));
+
     const [product, setProduct] = useState(null);
     useEffect(() => {
 

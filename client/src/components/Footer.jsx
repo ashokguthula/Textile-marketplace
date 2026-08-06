@@ -5,7 +5,7 @@ function Footer() {
 
             <div className="max-w-7xl mx-auto py-6 text-center text-gray-500">
 
-                © 2026 Textile Marketplace
+                © 2026 Textile Marketplace. Demo Project. No real transactions. Data shown is illustrative only. All rights reserved.
 
             </div>
 

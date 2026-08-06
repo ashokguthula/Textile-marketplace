@@ -96,12 +96,14 @@ return (
             <p>{product.supplier.fullName}</p>
             <p>{product.supplier.email}</p>
         </div>
+        {user?.role === "buyer" &&(
         <button
             onClick={handleAddToCart}
             className="mt-6 bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700"
         >
             Add to Cart
         </button>
+        )};
 
     </div>
 );
